@@ -1,0 +1,11 @@
+.control-label{
+    color: dodgerblue
+}
+
+.invalid-feedback{
+    color: tomato
+}
+
+.mandatory{
+    color:red
+}

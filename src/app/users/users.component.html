@@ -1,0 +1,80 @@
+<!--
+/**
+ * File Name: users.component.html
+ * Shows all users profile on Data Table
+ * Created On: 25/08/2018
+ * 
+ * Author: Alokik Pathak 
+ */
+-->
+
+<div  class = 'activity' >
+  <div class="DataTable" >
+    
+    <!-- Filter Field -->
+    <mat-form-field class='filter-field'>
+       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+    
+    <!-- Profiles Data Table -->
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
+
+      <!-- UserID Field-->
+      <ng-container matColumnDef="___kp_UserID">
+
+        <mat-header-cell *matHeaderCellDef> User ID  </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.___kp_UserID}} </mat-cell>
+      </ng-container>
+ 
+      <!-- FirstName Field-->
+      <ng-container matColumnDef="FirstName">
+        <mat-header-cell *matHeaderCellDef> FirstName </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.FirstName}} </mat-cell>
+      </ng-container>
+  
+      <!-- LastName Field-->
+      <ng-container matColumnDef="LastName">
+        <mat-header-cell *matHeaderCellDef> LastName </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.LastName }} </mat-cell>
+      </ng-container>
+
+      <!-- Email Field-->
+      <ng-container   matColumnDef="_ka_Email">
+        <mat-header-cell  class="column-large"  *matHeaderCellDef> Email </mat-header-cell>
+        <mat-cell  class="column-large"  *matCellDef="let user"> {{ user._ka_Email }} </mat-cell>
+      </ng-container>
+
+      <!-- Mobile Field-->
+      <ng-container matColumnDef="_ka_Mobile">
+        <mat-header-cell *matHeaderCellDef> Phone </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{ user._ka_Mobile }} </mat-cell>
+      </ng-container>
+
+      <!-- Address field -->
+      <ng-container matColumnDef="Address">
+        <mat-header-cell *matHeaderCellDef> Address </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{ user.Address }} </mat-cell>
+      </ng-container>
+
+      <!-- Designation field -->
+      <ng-container matColumnDef="Designation">
+        <mat-header-cell *matHeaderCellDef> Designation </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{ user.Designation }} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectRow(row)" ></mat-row>
+  
+    </mat-table>
+  
+    <!-- Pagination -->
+    <mat-paginator [pageSize]='pageSize' [pageSizeOptions]="[5, 10, 20]" [length]='20'
+    [pageIndex]="currentPage" [showFirstLastButtons]="true" (page)='pageEvent = getPaginatorData($event)' ></mat-paginator>
+
+  
+  </div>
+  
+  
+  
+  

@@ -1,0 +1,82 @@
+<!--
+/**
+ * Filename  - activity.component.html
+ * Description : It contains activity data table.
+ * @author  : Alokik Pathak
+ * Created date : 05/09/2018
+ */
+-->
+
+<div  class = 'activity'>
+<div class="DataTable" >
+  
+  <!-- Filter Field -->
+  <mat-form-field class='filter-field'>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+
+  <div *ngIf="spinnerFlag">
+    <mat-progress-spinner class="spinner" mode="indeterminate"></mat-progress-spinner>
+  </div>
+
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
+    
+    <ng-container matColumnDef="___kp_Id">
+      <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.___kp_Id}} </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="Name">
+      <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.Name}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="CreationTimestamp">
+      <mat-header-cell *matHeaderCellDef> Created On </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.CreationTimestamp }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="CreatedBy">
+      <mat-header-cell *matHeaderCellDef> Created By </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{ user.CreatedBy }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="ModificationTimestamp">
+      <mat-header-cell *matHeaderCellDef> Modified On </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{ user.ModificationTimestamp }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="ModifiedBy">
+      <mat-header-cell *matHeaderCellDef> Modified By </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.ModifiedBy}} </mat-cell>
+    </ng-container>
+
+    <!-- Edit and delete button column -->
+    <ng-container matColumnDef="actionsColumn">
+        <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
+        <mat-cell *matCellDef="let user">
+            
+          <button  mat-icon-button class='deleteButton' matTooltip="delete this activity" (click)='performDelete()'>
+            <i class="material-icons">delete_forever</i>
+          </button>
+
+          <button  mat-icon-button class='modifyButton' matTooltip="edit this activity" (click)='performModify()'>
+              <i class="material-icons">create</i>
+          </button>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectRow(row)" ></mat-row>
+
+  </mat-table>
+
+  <div class="button-row">
+      <button mat-raised-button matTooltip="Add new activity" (click)='openAddActivityDialog()' ><i class="material-icons">add</i>Activity</button>
+  </div>
+
+</div>
+
+
+

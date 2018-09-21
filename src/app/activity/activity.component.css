@@ -1,0 +1,77 @@
+
+.DataTable {
+    margin: 1% 1% 1% 1%;
+    width: 98%;
+    position: absolute;
+}
+  
+.mat-column-Name {
+  flex: 0 0 40%;
+}
+
+.mat-header-cell{
+  color:white;
+  background-color: royalblue;
+}
+
+button{
+  color: white;
+  background-color: royalblue;
+}
+
+.button-row{
+  text-align: center;
+}
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  background-color: inherit;
+}
+  
+.deleteButton{
+  color: tomato;
+  background-color: white;
+}
+
+.updateButton{
+  color: royalblue;
+  background-color: white;
+}
+
+.modifyButton{
+  color: royalblue;
+  background-color: white;
+}
+.cancelButton{
+  color: tomato;
+  background-color: white;
+}
+
+.activity{
+  width: 100%;
+  background-color: tomato;
+}
+
+.addButton{
+  position: absolute;
+  right: 30px;
+  top: 15px;
+}
+
+.filter-field{
+  width: 100%;
+}
+
+.spinner{
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}

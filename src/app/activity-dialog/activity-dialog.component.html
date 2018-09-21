@@ -1,0 +1,48 @@
+<!--
+/**
+ * Filename  - activity-dialog.component.html
+ * Description : It contains dialog form.
+ * @author  : Alokik Pathak
+ * Created date : 05/09/2018
+ */
+-->
+
+<div class='parent'>
+  
+  <h1 mat-dialog-title class="title" >Modify Activity</h1>
+  <h1 mat-dialog-title  class="title"  *ngIf=''>Do you want to delete this Activity</h1>
+  <div mat-dialog-content class='custom-dialog-content' >
+
+  <form  >
+    
+    <mat-form-field class="example-full-width">
+
+      <textarea matInput placeholder='Activity description'  [(ngModel)]='data.activityDescription' [formControl]='activityDescription'></textarea>
+      
+      <mat-hint>Please add description before pressing submit</mat-hint>
+      
+      <mat-error *ngIf="activityDescription.hasError('required')">
+        Activity description is <strong>required</strong>
+      </mat-error>
+
+    </mat-form-field>
+
+  </form>
+
+  </div>
+
+  
+  <div mat-dialog-actions class='dialog-actions'>
+
+    <button mat-button (click)="onNoClick()"><i class="material-icons">close</i>Cancel</button>
+    <div *ngIf="activityDescription.valid">
+      <button mat-button [mat-dialog-close]="data.description" (click)='onSubmit()'matTooltip="Modify activity details" cdkFocusInitial><i class="material-icons">create</i> Modify</button>
+    </div>
+    
+    <div *ngIf="">
+      <button mat-button [mat-dialog-close]="data.description" (click)='onSubmit()'matTooltip="Delete activity" cdkFocusInitial><i class="material-icons">delete</i>Confirm</button>
+    </div>
+
+  </div>
+
+</div>

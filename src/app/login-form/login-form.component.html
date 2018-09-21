@@ -1,0 +1,69 @@
+<!--
+/**
+ * Filename  - login-form.component.html
+ * Description : It contains the login form.
+ * @author  : Alokik Pathak
+ * Created date : 03/09/2018
+ */
+-->
+
+<div>    
+    
+    <form [formGroup]="loginForm" (ngSubmit)='onSubmit()' class="form-horizontal" id='loginFormId' name='loginForm'>
+    
+    <div class="form-group">
+      <h2 class="col-sm-6"> Login Form </h2>
+    </div>
+   
+    <div class="form-group">
+      <span class='col-sm-6 response' *ngIf='response$' > {{ response$.status }} </span> 
+    </div>
+
+    <div class="form-group" >
+			<label class="control-label col-sm-2" for="email">Email</label>
+			<div class="col-sm-3 field">
+			  <input type="text" class="form-control" id="email" [(ngModel)]="model.email" placeholder="Enter your email" formControlName="email"  [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+			</div>
+  
+      <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+        <div *ngIf="f.email.errors.required">Email is required</div>
+        <div *ngIf="f.email.errors.pattern">Enter a valid email address</div>
+      </div>
+    </div>
+
+    <div class="form-group" >
+        <label class="control-label col-sm-2" for="password">Password</label>
+        <div class="col-sm-3 field" >
+          <input type="password" class="form-control" id='password' [(ngModel)]="model.password" placeholder="Enter your Password" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+        </div>
+   
+        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+          <div *ngIf="f.password.errors.required">Password is required</div>
+          <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+        </div>
+        
+    </div>
+
+    <div class="form-group">
+      <i class="fa fa-spinner fa-spin control-label" style="font-size:24px"></i>
+    </div>
+
+    <div class="form-group">        
+        <div class="col-sm-1 col-sm-offset-2">
+          <button [disabled]='loading' class="btn btn-primary" id="login">LOGIN</button>
+        </div><br>	
+    </div>
+      
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-1" >
+          <a routerLink='/register'>SignUp here!</a>
+        </div>
+    </div>
+    
+  </form>
+
+
+ 
+</div>
+
+

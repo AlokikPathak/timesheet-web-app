@@ -1,0 +1,29 @@
+<div style="width: 100%">
+  
+  <h1 mat-dialog-title style="color: royalblue">Add Activity</h1>
+  <div mat-dialog-content style="width: 100%">
+
+  <form >
+    <mat-form-field class="example-full-width" style="width: 100%">
+      <textarea matInput placeholder='Activity description' [(ngModel)]="data.activityDescription" [formControl]='activityDescription'></textarea>
+      
+      <mat-hint>Please add description before pressing submit</mat-hint>
+      
+      <mat-error *ngIf="activityDescription.hasError('required')">
+        Activity description is <strong>required</strong>
+      </mat-error>
+
+    </mat-form-field>
+  </form>
+  </div>
+
+  <div mat-dialog-actions style="text-align: center">
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    
+    <div *ngIf="activityDescription.valid">
+      <button mat-button [mat-dialog-close]="data.description" (click)='onSubmit()'matTooltip="Add new activity details" cdkFocusInitial>Submit</button>
+    </div>
+
+  </div>
+
+</div>

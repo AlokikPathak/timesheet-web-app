@@ -1,0 +1,19 @@
+.title{
+    color: royalblue;
+}
+
+.custom-dialog-content{
+    width: 100%;
+}
+
+.parent{
+    width: 100%;
+}
+
+.example-full-width{
+    width: 100%;
+}
+
+.dialog-actions{
+    text-align: center;
+}
