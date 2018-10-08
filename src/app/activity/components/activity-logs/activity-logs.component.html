@@ -1,0 +1,54 @@
+
+<div  class = 'activity' >
+  <div class="DataTable" >
+    
+    <!-- Filter Field -->
+    <mat-form-field class='filter-field'>
+       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+    
+    <!-- Spinner -->
+    <div *ngIf="spinnerFlag">
+      <mat-progress-spinner class="spinner" mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <!-- Profiles Data Table -->
+    <mat-table [dataSource]="dataSource"  matSort (matSortChange)='sortData($event)' class="mat-elevation-z8" >
+
+      <!-- UserID Field-->
+      <ng-container matColumnDef="___kp_LogId">
+
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Log ID  </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.___kp_LogId}} </mat-cell>
+      </ng-container>
+ 
+      <!-- FirstName Field-->
+      <ng-container matColumnDef="Note">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Log Notes </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.Note}} </mat-cell>
+      </ng-container>
+  
+      <!-- LastName Field-->
+      <ng-container matColumnDef="CreationTimestamp">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Created On </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.CreationTimestamp}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectRow(row)" ></mat-row>
+  
+    </mat-table>
+  
+    <!-- Pagination -->
+    <mat-paginator [pageSize]='3' [pageSizeOptions]="[3, 5, 10]" 
+    [pageIndex]="0" [showFirstLastButtons]="true" (page)='pageEvent = getPaginatorData($event)' >
+    </mat-paginator>
+    
+    <!-- Add Activity-Log button-->
+    <div class="button-row">
+      <button class='add-button' mat-fab matTooltip="Add new log" (click)='openAddLogDialog()' ><i class="material-icons">add</i></button>
+    </div>
+  </div>
+
+</div>

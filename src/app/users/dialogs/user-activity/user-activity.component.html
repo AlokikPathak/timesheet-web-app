@@ -1,0 +1,72 @@
+<!--
+/**
+ * Filename  - user-activity.component.html
+ * Description : It contains activity data table.
+ * @author  : Alokik Pathak
+ * Created date : 05/09/2018
+ */
+-->
+
+<div  class = 'activity'>
+  <div class="DataTable" >
+    
+    <!-- Filter Field -->
+    <mat-form-field class='filter-field'>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  
+    <div *ngIf="spinnerFlag">
+      <mat-progress-spinner class="spinner" mode="indeterminate"></mat-progress-spinner>
+    </div>
+  
+    <mat-table [dataSource]="dataSource"   matSort (matSortChange)='sortData($event)' class="mat-elevation-z8" >
+      
+      <ng-container matColumnDef="___kp_Id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.___kp_Id}} </mat-cell>
+      </ng-container>
+      
+      <ng-container matColumnDef="Name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.Name}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="CreationTimestamp">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Created On </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.CreationTimestamp }} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="CreatedBy">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Created By </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{ user.CreatedBy }} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="ModificationTimestamp">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Modified On </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{ user.ModificationTimestamp }} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="ModifiedBy">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Modified By </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.ModifiedBy}} </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectRow(row)" ></mat-row>
+  
+    </mat-table>
+  
+    <!-- Pagination -->
+    <mat-paginator [pageSize]='5' [pageSizeOptions]="[5, 10]"
+    [pageIndex]='0' [showFirstLastButtons]="true" (page)='pageEvent = getPaginatorData($event)' ></mat-paginator>
+  
+    <!-- Assign activity button-->
+    <div class="button-row">
+        <button class='add-button' mat-fab matTooltip="Assign activity" (click)='openAssignActivityDialog()' ><i class="material-icons">add</i></button>
+    </div>
+    
+  </div>
+  
+  
+  
+  

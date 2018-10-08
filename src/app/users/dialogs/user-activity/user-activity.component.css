@@ -1,0 +1,16 @@
+.mat-header-cell{
+    color: royalblue;
+    background-color: white;
+}
+
+.add-button{
+    background-color: royalblue;
+}
+
+.filter-field{
+    width: 100%;
+}
+
+.mat-column-Name {
+    flex: 0 0 40%;
+}

@@ -112,6 +112,8 @@ export class LoginFormComponent implements OnInit {
         this.sessionStorage.store( "Login", true );
         this.sessionStorage.store( 'user', this.model.email );
         this.sessionStorage.store("loggedInUserId", this.response$.UserID);
+        this.sessionStorage.store("Name", this.response$.Name);
+        this.sessionStorage.store("Designation", this.response$.Designation);
         
         // Navigating to Dashboard component
         this.router.navigate(['dashboard']);

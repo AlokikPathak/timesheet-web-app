@@ -1,0 +1,11 @@
+.filter-field{
+    width: 100%;
+}
+
+.add-button{
+    background-color: royalblue;
+    z-index: 999;
+    left: 0;
+    right: 100%;
+    top: 95%;
+  }

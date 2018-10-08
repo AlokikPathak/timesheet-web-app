@@ -70,7 +70,7 @@ export class ActivityDialogComponent implements OnInit {
     private sessionStorage: SessionStorageService,
     public dialogRef: MatDialogRef<ActivityDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-  ) { }
+  ) {}
 
   ngOnInit() {}
 

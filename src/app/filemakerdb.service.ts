@@ -11,8 +11,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { CATCH_ERROR_VAR } from '../../node_modules/@angular/compiler/src/output/abstract_emitter';
 import { Observable } from '../../node_modules/rxjs';
 import { HttpHeaders } from '@angular/common/http';
-import { catchError, retry } from 'rxjs/operators';
-import { Activity } from './models/server_response.model';
+import { catchError, retry, skip } from 'rxjs/operators';
+import { Activity, Log } from './models/server_response.model';
 import { Profile } from './models/server_response.model';
 
 @Injectable({
@@ -33,10 +33,13 @@ export class FilemakerdbService {
   /**
    * Fetches all the users details
    */
-  getUsers(): Observable<Profile[]>{
+  getUsers(paginator, filterKey, filterField, sort, order): Observable<Profile[]>{
 
-   return this.http.get<Profile[]>('http://localhost:8080/Project/timesheet/public/index.php/api/users');
-    
+   var skipRecords = paginator.pageIndex * paginator.pageSize;
+   var limit = paginator.pageSize;
+
+   return this.http.get<Profile[]>('http://localhost:8080/Project/timesheet/public/index.php/api/users?search='+filterKey+'&field='+filterField+'&skip='+skipRecords+'&limit='+limit+'&sort='+sort+'&order='+order);
+  
   }
 
   /**
@@ -51,10 +54,22 @@ export class FilemakerdbService {
   /**
    * Fetches all the users details
    */
-  getUsersFiltered( filterKey ): Observable<Profile[]>{
+  getUsersFiltered( filterKey, paginator ): Observable<Profile[]>{
 
-    return this.http.get<Profile[]>('http://localhost:8080/Project/timesheet/public/index.php/api/users/filter/'+filterKey);
+    var skipRecords = paginator.pageIndex * paginator.pageSize;
+    var limit = paginator.pageSize;
+
+    return this.http.get<Profile[]>('http://localhost:8080/Project/timesheet/public/index.php/api/users?search='+filterKey+'&field=all&skip='+skipRecords+'&limit='+limit);
      
+  }
+
+  /**
+   * Fetches all the users details
+   */
+  getUsersColumnFiltered( filterKey, filterField ): Observable<Profile[]>{
+
+    return this.http.get<Profile[]>('http://localhost:8080/Project/timesheet/public/index.php/api/users?search='+filterKey+'&field='+filterField );
+    
   }
 
   /**
@@ -111,9 +126,12 @@ export class FilemakerdbService {
   /**
    * Fetches all the users details
    */
-  getAllActivity( userId ): Observable<Activity[]>{
+  getAllActivity( userId, paginator, filterKey, filterField, sort, order ): Observable<Activity[]>{
 
-    return this.http.get<Activity[]>('http://localhost:8080/Project/timesheet/public/index.php/api/activity/'+userId);
+    var skipRecords = paginator.pageIndex * paginator.pageSize;
+    var limit = paginator.pageSize;
+
+    return this.http.get<Activity[]>('http://localhost:8080/Project/timesheet/public/index.php/api/activities/'+userId+'?search='+filterKey+'&field='+filterField+'&skip='+skipRecords+'&limit='+limit+'&sort='+sort+'&order='+order);
      
    }
 
@@ -122,30 +140,34 @@ export class FilemakerdbService {
    */
   filterActivity( userId, keyWord ): Observable<Activity[]>{
 
-    return this.http.get<Activity[]>('http://localhost:8080/Project/timesheet/public/index.php/api/activity/'+userId+'/'+ keyWord);
+    return this.http.get<Activity[]>('http://localhost:8080/Project/timesheet/public/index.php/api/activities/'+userId+'/'+ keyWord);
      
   }
 
-   /**
-    * Add a new Activity to database
-    */
-   addActivity( userId, name){
+  /**
+   * Add a new Activity to database
+   */
+  addActivity( userId, name, createdBy){
 
     let newRecordData = new HttpParams();
     
     newRecordData = newRecordData.set('__kf_UserID', userId);
     newRecordData = newRecordData.set('Name', name);
+    newRecordData = newRecordData.set('CreatedBy', createdBy);
+
+    console.log("Activity details, UserID: "+userId+" Description: "+name+" CreatedBy: "+createdBy);
+
 
     return this.http.post(
-      'http://localhost:8080/Project/timesheet/public/index.php/api/activity',
+      'http://localhost:8080/Project/timesheet/public/index.php/api/activities',
   
       newRecordData
       ); 
-   }
+  }
 
   deleteActivity( activityId ){
      
-    return this.http.delete('http://localhost:8080/Project/timesheet/public/index.php/api/activity/'+activityId);
+    return this.http.delete('http://localhost:8080/Project/timesheet/public/index.php/api/activities/'+activityId);
   }
 
   updateActivity(activityId, details){
@@ -156,11 +178,43 @@ export class FilemakerdbService {
     newRecordData = newRecordData.set('Name', details);
 
     return this.http.put(
-      'http://localhost:8080/Project/timesheet/public/index.php/api/activity',
+      'http://localhost:8080/Project/timesheet/public/index.php/api/activities',
   
       newRecordData
     );
 
 
+  }
+
+  /**
+   * Fetches all logs of a particular activity
+   */
+  getActivityLogs( activityId, paginator, filterKey, filterField, sort, order ): Observable<Log[]>{
+
+    var skipRecords = paginator.pageIndex * paginator.pageSize;
+    var limit = paginator.pageSize;
+
+    return this.http.get<Log[]>('http://localhost:8080/Project/timesheet/public/index.php/api/logs/'+activityId+'?search='+filterKey+'&field='+filterField+'&skip='+skipRecords+'&limit='+limit+'&sort='+sort+'&order='+order);
+     
+   }
+
+  /**
+   * Add a new Activity to database
+   */
+  addActivityLog( activityId, note){
+
+    let newRecordData = new HttpParams();
+    
+    newRecordData = newRecordData.set('__kf_ActivityId', activityId);
+    newRecordData = newRecordData.set('Note', note);
+
+    console.log("Activity Log details, ActivityID: "+activityId+" Note: "+note);
+
+
+    return this.http.post(
+      'http://localhost:8080/Project/timesheet/public/index.php/api/logs',
+  
+      newRecordData
+      ); 
   }
 }

@@ -1,0 +1,30 @@
+
+<div style="width: 100%">
+  
+  <h1 mat-dialog-title style="color: royalblue">Add Activity-Log</h1>
+  <div mat-dialog-content style="width: 100%">
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field class="example-full-width" style="width: 100%">
+      <textarea matInput placeholder='Log description' [formControl]="form.controls['logDescription']"></textarea>
+      
+      <mat-hint>Please add description before pressing submit</mat-hint>
+      
+      <mat-error *ngIf="form.controls['logDescription'].hasError('required')">
+        Activity-Log description is <strong>required</strong>
+      </mat-error>
+
+    </mat-form-field>
+  </form>
+  </div>
+
+  <div mat-dialog-actions style="text-align: center">
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    
+    <div *ngIf="form.controls['logDescription'].valid">
+      <button mat-button (click)='onSubmit()'matTooltip="Add new activity log details" cdkFocusInitial>Submit</button>
+    </div>
+
+  </div>
+
+</div>

@@ -19,35 +19,35 @@
     <mat-progress-spinner class="spinner" mode="indeterminate"></mat-progress-spinner>
   </div>
 
-  <mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
+  <mat-table [dataSource]="dataSource"   matSort (matSortChange)='sortData($event)' class="mat-elevation-z8" >
     
     <ng-container matColumnDef="___kp_Id">
-      <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
       <mat-cell *matCellDef="let user"> {{user.___kp_Id}} </mat-cell>
     </ng-container>
     
     <ng-container matColumnDef="Name">
-      <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
       <mat-cell *matCellDef="let user"> {{user.Name}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="CreationTimestamp">
-      <mat-header-cell *matHeaderCellDef> Created On </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Created On </mat-header-cell>
       <mat-cell *matCellDef="let user"> {{user.CreationTimestamp }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="CreatedBy">
-      <mat-header-cell *matHeaderCellDef> Created By </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Created By </mat-header-cell>
       <mat-cell *matCellDef="let user"> {{ user.CreatedBy }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="ModificationTimestamp">
-      <mat-header-cell *matHeaderCellDef> Modified On </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Modified On </mat-header-cell>
       <mat-cell *matCellDef="let user"> {{ user.ModificationTimestamp }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="ModifiedBy">
-      <mat-header-cell *matHeaderCellDef> Modified By </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Modified By </mat-header-cell>
       <mat-cell *matCellDef="let user"> {{user.ModifiedBy}} </mat-cell>
     </ng-container>
 
@@ -72,10 +72,15 @@
 
   </mat-table>
 
-  <div class="button-row">
-      <button mat-raised-button matTooltip="Add new activity" (click)='openAddActivityDialog()' ><i class="material-icons">add</i>Activity</button>
-  </div>
+  <!-- Pagination -->
+  <mat-paginator [pageSize]='5' [pageSizeOptions]="[5, 10, 20]" 
+  [pageIndex]='0' [showFirstLastButtons]="true" (page)='pageEvent = getPaginatorData($event)' ></mat-paginator>
 
+  <!-- Assign activity button-->
+  <div class="button-row">
+      <button class='add-button' mat-fab matTooltip="Add new activity" (click)='openAddActivityDialog()' ><i class="material-icons">add</i></button>
+  </div>
+  
 </div>
 
 

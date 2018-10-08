@@ -10,17 +10,13 @@
 }
 
 .mat-header-cell{
-  color:white;
-  background-color: royalblue;
+  color:royalblue;
+  background-color: white;
 }
 
 button{
   color: white;
   background-color: royalblue;
-}
-
-.button-row{
-  text-align: center;
 }
 
 .mat-header-row {
@@ -74,4 +70,12 @@ button{
   left: 0;
   bottom: 0;
   right: 0;
+}
+
+.add-button{
+  background-color: royalblue;
+  z-index: 999;
+  left: 0;
+  right: 100%;
+  top: 95%;
 }

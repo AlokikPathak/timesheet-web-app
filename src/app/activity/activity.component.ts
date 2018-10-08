@@ -10,7 +10,7 @@ import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import { ErrorStateMatcher} from '@angular/material/core';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, Sort } from '@angular/material';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -23,7 +23,8 @@ import { DataSource } from '@angular/cdk/collections';
 import { Observable } from '../../../node_modules/rxjs';
 import { ActivityDialogComponent } from '../activity-dialog/activity-dialog.component';
 import { DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.component';
-import { isEmpty } from '../../../node_modules/rxjs/operators';
+import { ActivityLogsComponent } from './components/activity-logs/activity-logs.component';
+import { isEmpty, tap, map, switchMap, catchError } from '../../../node_modules/rxjs/operators';
 
 // Dialog contents 
 export interface DialogData{
@@ -41,7 +42,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 @Component({
 
-  providers: [ ActivityDialogComponent  ],
+  providers: [ ActivityDialogComponent, ActivityLogsComponent  ],
   selector: 'app-activity',
   templateUrl: './activity.component.html',
   styleUrls: ['./activity.component.css'],
@@ -56,10 +57,21 @@ export class ActivityComponent implements OnInit {
   public name: string;
   public description: string;
 
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   public displayedColumns = 
   ['___kp_Id', 'Name', 'CreationTimestamp', 'CreatedBy', 'ModificationTimestamp', 'ModifiedBy', 'actionsColumn'];
  
   public dataSource;
+
+  // Query parameters
+  public filterKey  = '';
+  public filterField  = '___kp_Id';
+  public skip = 0;
+  public limit  = 10;
+  public sort = '___kp_Id';
+  public order = 'asc';
+
   
   // Stores service response
   private responseData: any = {};   
@@ -79,33 +91,42 @@ export class ActivityComponent implements OnInit {
     public snackBar: MatSnackBar,
   
   ) {
-    
-    this.spinnerFlag = true;
 
     // Initializing Mat-table
-    this.dataSource = new UserDataSource( this.filemakerDbService, this.sessionStorage );
-    this.spinnerFlag = false;
+    this.dataSource = new UserDataSource( 
+    this.filemakerDbService,
+    this.sessionStorage,
+    this.paginator,
+    this.filterKey,
+    this.filterField,
+    this.sort,
+    this.order
+  );
 
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+    // Adding paginator to Data source
+    this.dataSource.paginator = this.paginator;
+  }
 
   /**
    * Filters the table as per the search keyword
    * 
-   * @param string filterValue 
+   * @param string filterValue
    */
   applyFilter(filterValue: string) {
    
     filterValue = filterValue.trim().toLowerCase();
+    this.filterKey = filterValue;
 
-    if(  filterValue !== "" ){      
-      this.dataSource = new FilterUserDataSource( this.filemakerDbService, this.sessionStorage, filterValue );
-    
-    }else{
-      this.dataSource = new FilterUserDataSource( this.filemakerDbService, this.sessionStorage, "*" );
-    }
-   
+    console.log('Search key: '+filterValue+" type: global");
+    // 'all' for global search
+    this.filterField = 'all';
+
+    this.setPaginatorDefault();
+    this.refreshDataSource();
   }
 
   /** 
@@ -133,11 +154,18 @@ export class ActivityComponent implements OnInit {
 
   /**
    * Refresh DataTable
-   * 
    */
   public refreshDataSource(){
 
-    this.dataSource = new UserDataSource(this.filemakerDbService, this.sessionStorage);
+    this.dataSource = new UserDataSource(
+      this.filemakerDbService,
+      this.sessionStorage,
+      this.paginator,
+      this.filterKey,
+      this.filterField,
+      this.sort,
+      this.order
+    );
   }
   
   /**
@@ -152,14 +180,39 @@ export class ActivityComponent implements OnInit {
     if( this.deleteFlag ){
       
       console.log("Delete activity id: "+ row.___kp_Id);
-      this.deleteSelectedActivity( row.___kp_Id);
+      this.deleteSelectedActivity(row.___kp_Id);
       this.deleteFlag = false;
       
     }else if( this.modifyFlag ){
 
-      this.modifySelectedActivity( row.___kp_Id, row.Name);
+      this.modifySelectedActivity(row.___kp_Id, row.Name);
       this.modifyFlag = false;
-    } 
+    } else {
+
+      this.showActivityLogs(row.___kp_Id);
+    }
+  }
+
+  /**
+   * Open dialog to show activity logs
+   * @param activityId 
+   */
+  showActivityLogs(activityId){
+
+    console.log('open activity log dialog: ActivityId'+activityId);
+    const dialogRef = this.dialog.open(ActivityLogsComponent,{
+
+      width: '700px',
+      data:{ ActivityId: activityId }
+    });
+
+    dialogRef.afterClosed().subscribe( result => {
+
+      console.log('Activity Logs dialog was closed!');
+      this.description = result;
+
+    });
+
   }
 
   /**
@@ -168,7 +221,7 @@ export class ActivityComponent implements OnInit {
    */
   deleteSelectedActivity( id ){
 
-    const dialogRef = this.dialog.open( DialogConfirmComponent,{
+    const dialogRef = this.dialog.open(DialogConfirmComponent,{
 
       width: '300px',
       data:{ activityId: id }
@@ -247,14 +300,46 @@ export class ActivityComponent implements OnInit {
 
   /**
    * Show snack back component with message and action
-   * 
-   * @param string message 
-   * @param strin action 
+   *
+   * @param string message
+   * @param string action
    */
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 1000,
     });
+  }
+
+  /**
+   * Setting Paginator values to default
+   */
+  setPaginatorDefault(){
+    this.paginator.pageSize = 5;
+    this.paginator.pageIndex = 0;
+  }
+
+  /**
+   * Sort data table
+   */
+  sortData(sort: Sort){
+
+    console.log(sort);
+    this.sort = (sort.active);
+    this.order = (sort.direction);
+    this.refreshDataSource();
+
+    console.log("Sorted field: "+this.sort+" order: "+this.order);
+  }
+
+  /**
+   * Fetches Paginator data
+   * 
+   */
+  getPaginatorData(event){
+
+    console.log(event);
+    this.refreshDataSource();
+  
   }
 
 }
@@ -308,7 +393,7 @@ export class DialogForm {
     var name =jsonDataObject.activityDescription
   
     // Http request service to Add Activity to server database 
-    this.fileMakerData.addActivity( this.sessionStorage.retrieve('loggedInUserId'), name ).subscribe(
+    this.fileMakerData.addActivity( this.sessionStorage.retrieve('loggedInUserId'), name, this.sessionStorage.retrieve('Name') ).subscribe(
       
       fileMakerData => {
         
@@ -335,13 +420,36 @@ export class DialogForm {
  */
 export class UserDataSource extends DataSource<any> {
 
-  constructor( private fmService: FilemakerdbService, private sessionVariables: SessionStorageService){
+  constructor(
+    private fmService: FilemakerdbService,
+    private sessionVariables: SessionStorageService,
+    private paginator : MatPaginator,
+    private filterKey: string,
+    private filterField: string,
+    private sort: string,
+    private order: string
+  ){
     super();
   }
 
 	// Connect function called by the table to retrieve one stream containing the data to render
   connect(): Observable<Activity[]>{
-    return this.fmService.getAllActivity( this.sessionVariables.retrieve('loggedInUserId') );
+    return this.fmService.getAllActivity( this.sessionVariables.retrieve('loggedInUserId'), this.paginator, this.filterKey, this.filterField, this.sort, this.order ).pipe(
+      
+      tap( data=>{
+        
+        console.log('Observable data: ',data);
+
+        if (!('code' in data)) {
+          // setting up paginator
+          this.paginator.length = data[0].ResultsFound;
+        } else {
+          this.paginator.length = 0;
+          console.log("No results found!");
+        }
+      
+      })
+    );
   }
 
   disconnect(){}

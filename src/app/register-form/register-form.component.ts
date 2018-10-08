@@ -57,7 +57,6 @@ export class RegisterFormComponent implements OnInit {
         ]
       ],
 
-
       email:  [
         '',[
         Validators.required,
@@ -136,7 +135,7 @@ export class RegisterFormComponent implements OnInit {
 
  }
 
-   /**
+  /**
    * Gets the Server response and preform operation accordingly 
    * 
    */

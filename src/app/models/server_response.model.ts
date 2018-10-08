@@ -18,6 +18,7 @@ export interface Activity{
   CreatedBy:         string;
   ModificationTimestamp: string;
   ModifiedBy:          string;
+  ResultsFound:       number;
 }
 
 /**
@@ -33,4 +34,23 @@ export interface Profile{
   _ka_Mobile: string;
   Address: string;
   Designation: string;
+  ResultsFound: number;
+  ResultsFetch: number;
 }
+
+/**
+ * Structure of Activity Logs data
+ */
+export interface Log{
+
+  ___kp_LogId: number;
+  __kf_ActivityId: number;
+  Note: string;
+  CreationTimestamp: string;
+  UserName: string;
+  ActivityName: string;
+  Status: string;
+  ResultsFound: number;
+  ResultsFetch: number;
+}
+

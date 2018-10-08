@@ -21,6 +21,10 @@ import { LogoutComponent } from './logout/logout.component';
 import { ServeComponent } from './serve/serve.component';
 import { ActivityDialogComponent } from './activity-dialog/activity-dialog.component';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { UserActivityComponent } from './users/dialogs/user-activity/user-activity.component';
+import { AssignActivityDialogComponent } from './users/dialogs/assign-activity-dialog/assign-activity-dialog.component';
+import { ActivityLogsComponent } from './activity/components/activity-logs/activity-logs.component';
+import { AddActivityLogComponent } from './activity/components/add-activity-log/add-activity-log.component';
 
 
 @NgModule({
@@ -38,6 +42,10 @@ import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.componen
     DialogForm,
     ActivityDialogComponent,
     DialogConfirmComponent,
+    UserActivityComponent,
+    AssignActivityDialogComponent,
+    ActivityLogsComponent,
+    AddActivityLogComponent,
     
     
   ],
@@ -48,7 +56,12 @@ import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.componen
   entryComponents:[
     DialogForm,
     ActivityDialogComponent,
-    DialogConfirmComponent
+    DialogConfirmComponent,
+    UserActivityComponent,
+    AssignActivityDialogComponent,
+    ActivityLogsComponent,
+    AddActivityLogComponent,
+
   ],
   imports: [
     BrowserModule,
